@@ -2,7 +2,6 @@ import os
 import random
 import discord
 from dotenv import load_dotenv
-from discord.ext import commands
 import datetime
 
 load_dotenv()
@@ -27,12 +26,9 @@ async def random_roll(ctx: discord.ApplicationContext):
 async def raid_time(ctx: discord.ApplicationContext):
     weekday = int(datetime.datetime.now().strftime("%w"))
     raidDays = [0]
-    hour = int(datetime.datetime.now().strftime("%H"))
-    tillRaid = 20 - hour
-    tillRaid = 0 if tillRaid < 0 else tillRaid
 
     if weekday in raidDays:
-        response = f"{ctx.author.mention}, raid time is at 8pm EST Sundays! There is a raid today at 8pm EST!\n\n There are approximately {tillRaid} hours until the next raid!"
+        response = f"{ctx.author.mention}, raid time is at 8pm EST Sundays! There is a raid today at 8pm EST!"
     else:
         response = f"{ctx.author.mention}, raid time is at 8pm EST Sundays!"
     await ctx.respond(response)
