@@ -16,10 +16,18 @@ async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
 
-@bot.slash_command(name='roll', description='Rolls a random number from 0 - 100.')
+@bot.slash_command(name='roll', description='Rolls a random number from 1 - 100.')
 async def random_roll(ctx: discord.ApplicationContext):
-    response = f"🎲 {ctx.author.mention} rolled a {random.randrange(0, 100, 1)}! 🎲"
-    await ctx.respond(response)
+    try:
+        channel = str(ctx.channel.parent)
+        if channel != "item-requests":
+            response = f"🎲 {ctx.author.mention} rolled a {random.randrange(1, 100, 1)}! 🎲"
+            await ctx.respond(response)
+        else:
+            await ctx.respond("Sorry, this command cannot be used in this channel.", ephemeral=True)
+    except AttributeError:
+        response = f"🎲 {ctx.author.mention} rolled a {random.randrange(1, 100, 1)}! 🎲"
+        await ctx.respond(response)
 
 
 @bot.slash_command(name='raidtime', description='Returns the time of the raid.')
@@ -43,17 +51,15 @@ async def slap(ctx: discord.ApplicationContext, user: discord.Member):
 
 
 @bot.slash_command(name='bid', description='Places a bid on an item in the item-requests channel.')
-async def bid(ctx: discord.ApplicationContext, reputation=None):
+async def bid(ctx: discord.ApplicationContext, reputation):
     try:
         channel = str(ctx.channel.parent)
         username = ctx.author.display_name
         itemname = str(ctx.channel.name)
 
         if channel == "item-requests":
-            try:
-                reputation = int(reputation)
-            except (ValueError, TypeError):
-                reputation = "Unknown"
+
+            reputation = str(reputation)
 
             await ctx.respond(f"```"
                               f"{username} has bid on the item. ☝ \n\n"
